@@ -1,0 +1,13 @@
+- step:
+               name: send-vulnerabilities
+               image: ubuntu:20.04
+               size: 2x
+               script:
+                  - *setenv-script
+                  - apt update && apt-get install -y curl unzip
+                  - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                  - unzip awscliv2.zip 
+                  - ./aws/install --update
+                  - aws --version
+                  - VULN_REPORT=$(cat vuln.txt | sed ':a;N;$!ba;s/\n/\\n/g')  # Substitui novas linhas por \n para o SES
+                  - aws ses send-email --from "trivy@linxfood.com.br" --destination '{"ToAddresses":["'"$BITBUCKET_COMMIT_AUTHOR_EMAIL"'"]}'  --message '{"Subject":{"Data":"Relatório de Vulnerabilidades - Trivy | Repositório"},"Body":{"Text":{"Data":"'"$VULN_REPORT"'"}}}' --region us-east-1
