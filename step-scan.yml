@@ -1,0 +1,18 @@
+  - step:
+                name: trivy-scan
+                size: 2x
+                script:
+                  - chmod 644 docker_image.tar
+                  - pipe: aquasecurity/trivy-pipe:1.0.0
+                    variables:
+                        scanType: image
+                        input: 'docker_image.tar'
+                        format: 'table'
+                        exitCode: '0'
+                        ignoreUnfixed: 'true'
+                        vulnType: 'os,library'
+                        severity: 'CRITICAL,HIGH'
+                        output: vuln.txt
+                  - cat vuln.txt               
+                artifacts:
+                  - vuln.txt
