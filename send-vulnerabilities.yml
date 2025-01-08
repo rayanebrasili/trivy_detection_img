@@ -10,4 +10,4 @@
                   - ./aws/install --update
                   - aws --version
                   - VULN_REPORT=$(cat vuln.txt | sed ':a;N;$!ba;s/\n/\\n/g')  # Substitui novas linhas por \n para o SES
-                  - aws ses send-email --from "trivy@linxfood.com.br" --destination '{"ToAddresses":["'"$BITBUCKET_COMMIT_AUTHOR_EMAIL"'"]}'  --message '{"Subject":{"Data":"Relatório de Vulnerabilidades - Trivy | Repositório"},"Body":{"Text":{"Data":"'"$VULN_REPORT"'"}}}' --region us-east-1
+                  - aws ses send-email --from "email@email.com" --destination '{"ToAddresses":["'"$BITBUCKET_COMMIT_AUTHOR_EMAIL"'"]}'  --message '{"Subject":{"Data":"Relatório de Vulnerabilidades - Trivy | Repositório"},"Body":{"Text":{"Data":"'"$VULN_REPORT"'"}}}' --region us-east-1
